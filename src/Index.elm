@@ -1,36 +1,41 @@
 module Index exposing (..)
 import Browser
-import Html exposing (Html, button, div, text, Attribute)
+import Html exposing (Html, div, button, text)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style)
 
-main =
-  Browser.sandbox { init = 0, update = update, view = view }
+main = Browser.sandbox { update = update, view = view, init = init }
 
-type Msg = Increment | Decrement | Double
+-- MODEL
+-- We have store the user turn and state of the board.
 
-update msg model =
-  case msg of
-    Increment ->
-      model + 1
+type alias Board = List (List Int)
+type UserTurn = PlayerOne | PlayerTwo
+type alias Model = { board : Board, turn : UserTurn }
 
-    Decrement ->
-      model - 1
+init : Model
+init = {
+        board : [[0,0,0],[0,0,0],[0,0,0]],
+        turn : PlayerOne
+    }
 
-    Double ->
-      model * 2
+-- UPDATE
+
+type Action = CellClicked Int Int
+
+update : Model -> Action -> Model
+update model action =
+    case Action of
+        CellClicked row col ->
+            
 
 
-formStyle: List (Attribute msg)
-formStyle = [ style "background-color" "black",
-              style "color" "white",
-              style "width" "7%",
-              style "padding" "1% 0%" ]
+-- VIEW
+-- We need to visualise the board and display which player's turn it is.
 
-view model =
-  div []
-    [ button [ text "-" ]
-    , div formStyle [ text (String.fromInt model) ]
-    , button [] [ text "+" ]
-    , button [] [text "*2" ]
+view : Model -> Html msg
+view model = 
+    div [] [
+        button [onClick "2"] [],
+        text (String.fromInt model)
     ]
