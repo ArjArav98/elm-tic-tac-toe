@@ -1,2 +1,1 @@
-# football-sample
-Sample website for a football ground.
+Tic Tac Toe written in Elm.
