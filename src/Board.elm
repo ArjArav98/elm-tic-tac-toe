@@ -3,7 +3,7 @@ import Html exposing (Html, div, text, img)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (src, style)
 import Array exposing (Array) 
-import UserTurn exposing (..)
+import Player exposing (..)
 import Action exposing (..)
 import Styles exposing (..)
 
@@ -53,9 +53,9 @@ generateBoard row col sideLength board divArray =
 -- MANIPULATION
 --
 
-modifyBoard : Int -> Int -> UserTurn -> Board -> Board
-modifyBoard row col userTurn board = 
-    case userTurn of
+modifyBoard : Int -> Int -> Player -> Board -> Board
+modifyBoard row col currentPlayer board = 
+    case currentPlayer of
         PlayerOne ->
             fillBoardWith row col 1 board
         PlayerTwo ->
