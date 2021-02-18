@@ -1,9 +1,13 @@
 module Index exposing (..)
+
 import Browser
 import Array exposing (Array) 
 import Html exposing (Html, div, button, text)
 import Html.Events exposing (onClick)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (style, attribute)
+
+import Board exposing (..)
+import UserTurn exposing (..)
 
 
 main = Browser.sandbox { init = init, update = update, view = view }
@@ -14,8 +18,6 @@ main = Browser.sandbox { init = init, update = update, view = view }
 -- We have store the user turn and state of the board.
 
 
-type alias Board = Array (Array Int)
-type UserTurn = PlayerOne | PlayerTwo
 type alias Model = { board : Board, turn : UserTurn }
 
 
@@ -43,45 +45,7 @@ update action model =
 -- UTILITY FUNCTIONS
 -- Functions which help with our application logic.
 
-modifyBoard : Int -> Int -> UserTurn -> Board -> Board
-modifyBoard row col userTurn board = 
-    case userTurn of
-        PlayerOne ->
-            fillBoardWith row col 1 board
-        PlayerTwo ->
-            fillBoardWith row col 2 board
-         
 
-fillBoardWith : Int -> Int -> Int -> Board -> Board
-fillBoardWith row col characterNum board =
-    Array.set row (Array.set col characterNum <| extractRowValue <| Array.get row board) board
-
-
-extractCellValue : Maybe Int -> Int
-extractCellValue result =
-    case result of
-        Just value ->
-            value
-        Nothing ->
-            -1
-
-
-extractRowValue : Maybe (Array Int) -> Array Int
-extractRowValue result =
-    case result of
-        Just value ->
-            value
-        Nothing ->
-            Array.fromList [0,0,0]
-
-
-getNextPlayer : UserTurn -> UserTurn
-getNextPlayer userTurn =
-    case userTurn of
-        PlayerOne ->
-            PlayerTwo
-        PlayerTwo ->
-            PlayerOne
 
 
 --
@@ -91,6 +55,14 @@ getNextPlayer userTurn =
 
 view : Model -> Html Action
 view model = 
-    div [] [
-        button [onClick (CellClicked 1 2)] [text "+"]
+    div [attribute "class" "board"] [
+        div [onClick (CellClicked 0 0)] [text (getDisplayCharacter <| getCellValueFromBoard 0 0 model.board)],
+        div [onClick (CellClicked 0 1)] [text (getDisplayCharacter <| getCellValueFromBoard 0 1 model.board)],
+        div [onClick (CellClicked 0 2)] [text (getDisplayCharacter <| getCellValueFromBoard 0 2 model.board)],
+        div [onClick (CellClicked 1 0)] [text (getDisplayCharacter <| getCellValueFromBoard 1 0 model.board)],
+        div [onClick (CellClicked 1 1)] [text (getDisplayCharacter <| getCellValueFromBoard 1 1 model.board)],
+        div [onClick (CellClicked 1 2)] [text (getDisplayCharacter <| getCellValueFromBoard 1 2 model.board)],
+        div [onClick (CellClicked 2 0)] [text (getDisplayCharacter <| getCellValueFromBoard 2 0 model.board)],
+        div [onClick (CellClicked 2 1)] [text (getDisplayCharacter <| getCellValueFromBoard 2 1 model.board)],
+        div [onClick (CellClicked 2 2)] [text (getDisplayCharacter <| getCellValueFromBoard 2 2 model.board)]
     ]
