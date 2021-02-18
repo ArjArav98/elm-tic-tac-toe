@@ -21,19 +21,19 @@ type alias Board = Array (Array Int)
 
 generateBoard : Int -> Int -> Int -> Board -> Array (Html Action) -> List (Html Action)
 generateBoard row col sideLength board divArray =
+    let
+        displayCharacter = getDisplayCharacter <| getCellValueFromBoard row col board
+        generatedDiv = (div [onClick (CellClicked row col)] [text displayCharacter])
+    in
     if (row < 0) then
         Array.toList divArray
     else if (col == 0) then
         generateBoard (row-1) (sideLength-1) sideLength board (
-                Array.push (
-                    div [onClick (CellClicked row col)] [text (getDisplayCharacter <| getCellValueFromBoard row col board)]
-                ) divArray
+                Array.push generatedDiv divArray
             )
     else
         generateBoard row (col-1) sideLength board (
-            Array.push (
-                div [onClick (CellClicked row col)] [text (getDisplayCharacter <| getCellValueFromBoard row col board)]
-            ) divArray
+            Array.push generatedDiv divArray
         )
 
 
