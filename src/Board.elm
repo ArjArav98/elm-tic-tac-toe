@@ -1,9 +1,11 @@
 module Board exposing (..)
-import Html exposing (Html, div, text)
+import Html exposing (Html, div, text, img)
 import Html.Events exposing (onClick)
+import Html.Attributes exposing (src, style)
 import Array exposing (Array) 
 import UserTurn exposing (..)
 import Action exposing (..)
+import Styles exposing (..)
 
 --
 -- TYPES
@@ -22,9 +24,19 @@ type alias Board = Array (Array Int)
 generateBoard : Int -> Int -> Int -> Board -> Array (Html Action) -> List (Html Action)
 generateBoard row col sideLength board divArray =
     let
-        displayCharacter = getDisplayCharacter <| getCellValueFromBoard row col board
-        generatedDiv = (div [onClick (CellClicked row col)] [text displayCharacter])
+        displayCharacter = getDisplayCharacterImgLink <| getCellValueFromBoard row col board
+        displayCharacterBg = getDisplayCharacterBgColor <| getCellValueFromBoard row col board
+
+        divAttributes = [
+                onClick (CellClicked row col),
+                style "background-color" displayCharacterBg
+            ] ++ boardTileStyles
+        imgAttributes = [src displayCharacter] ++ boardTileImgStyles
+
+        generatedDiv = div divAttributes [img imgAttributes []]
+
     in
+
     if (row < 0) then
         Array.toList divArray
     else if (col == 0) then
@@ -65,14 +77,23 @@ getCellValueFromBoard row col board =
     extractCellValue <| Array.get col (extractRowValue <| Array.get row board)
 
 
-getDisplayCharacter : Int -> String
-getDisplayCharacter charNum =
+getDisplayCharacterImgLink : Int -> String
+getDisplayCharacterImgLink charNum =
     if charNum == 1 then
-        "X"
+        "../assets/img/x.png"
     else if charNum == 2 then
-        "O"
+        "../assets/img/o.png"
     else
-        "."
+        "../assets/img/o.png"
+
+getDisplayCharacterBgColor : Int -> String
+getDisplayCharacterBgColor charNum =
+    if charNum == 1 then
+        "green"
+    else if charNum == 2 then
+        "orange"
+    else
+        "white"
 
 
 extractCellValue : Maybe Int -> Int
