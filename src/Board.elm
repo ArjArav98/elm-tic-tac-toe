@@ -1,6 +1,9 @@
 module Board exposing (..)
+import Html exposing (Html, div, text)
+import Html.Events exposing (onClick)
 import Array exposing (Array) 
 import UserTurn exposing (..)
+import Action exposing (..)
 
 --
 -- TYPES
@@ -16,7 +19,22 @@ type alias Board = Array (Array Int)
 -- GENERATION
 --
 
-generateBoard
+generateBoard : Int -> Int -> Int -> Board -> Array (Html Action) -> List (Html Action)
+generateBoard row col sideLength board divArray =
+    if (row < 0) then
+        Array.toList divArray
+    else if (col == 0) then
+        generateBoard (row-1) (sideLength-1) sideLength board (
+                Array.push (
+                    div [onClick (CellClicked row col)] [text (getDisplayCharacter <| getCellValueFromBoard row col board)]
+                ) divArray
+            )
+    else
+        generateBoard row (col-1) sideLength board (
+            Array.push (
+                div [onClick (CellClicked row col)] [text (getDisplayCharacter <| getCellValueFromBoard row col board)]
+            ) divArray
+        )
 
 
 --
