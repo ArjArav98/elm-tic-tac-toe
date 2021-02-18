@@ -84,12 +84,12 @@ getDisplayCharacterImgLink charNum =
     else if charNum == 2 then
         "../assets/img/o.png"
     else
-        "../assets/img/o.png"
+        "../assets/img/white.png"
 
 getDisplayCharacterBgColor : Int -> String
 getDisplayCharacterBgColor charNum =
     if charNum == 1 then
-        "green"
+        "#2196f3"
     else if charNum == 2 then
         "orange"
     else

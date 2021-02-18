@@ -2,7 +2,7 @@ module Index exposing (..)
 
 import Browser
 import Array exposing (Array) 
-import Html exposing (Html, div, button, text)
+import Html exposing (Html, div, button, text, p, h1, h3)
 import Html.Attributes exposing (style, attribute)
 
 import Board exposing (..)
@@ -51,4 +51,10 @@ update action model =
 
 view : Model -> Html Action
 view model = 
-    div boardStyles (generateBoard 2 2 3 model.board Array.empty)
+    div screenStyles [
+        div settingsStyles [
+            h1 [] [text "Welcome!"],
+            h3 [] [text ((getPlayerTurnMessage model.turn) ++ ", your turn.")]
+        ],
+        div boardStyles (generateBoard 2 2 3 model.board Array.empty)
+    ] 

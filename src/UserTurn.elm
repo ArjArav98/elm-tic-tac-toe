@@ -17,3 +17,11 @@ getNextPlayer userTurn =
             PlayerTwo
         PlayerTwo ->
             PlayerOne
+
+getPlayerTurnMessage : UserTurn -> String
+getPlayerTurnMessage player =
+    case player of
+        PlayerOne ->
+            "Player 1 (X)"
+        PlayerTwo ->
+            "Player 2 (O)"
