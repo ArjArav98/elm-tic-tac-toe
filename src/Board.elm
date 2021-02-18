@@ -12,6 +12,17 @@ type alias Board = Array (Array Int)
 -- FUNCTIONS
 --
 
+--
+-- GENERATION
+--
+
+generateBoard
+
+
+--
+-- MANIPULATION
+--
+
 modifyBoard : Int -> Int -> UserTurn -> Board -> Board
 modifyBoard row col userTurn board = 
     case userTurn of
@@ -24,6 +35,11 @@ modifyBoard row col userTurn board =
 fillBoardWith : Int -> Int -> Int -> Board -> Board
 fillBoardWith row col characterNum board =
     Array.set row (Array.set col characterNum <| extractRowValue <| Array.get row board) board
+
+
+--
+-- QUERYING
+--
 
 
 getCellValueFromBoard : Int -> Int -> Board -> Int

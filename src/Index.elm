@@ -8,6 +8,7 @@ import Html.Attributes exposing (style, attribute)
 
 import Board exposing (..)
 import UserTurn exposing (..)
+import Styles exposing (..) 
 
 
 main = Browser.sandbox { init = init, update = update, view = view }
@@ -55,7 +56,7 @@ update action model =
 
 view : Model -> Html Action
 view model = 
-    div [attribute "class" "board"] [
+    div boardStyles [
         div [onClick (CellClicked 0 0)] [text (getDisplayCharacter <| getCellValueFromBoard 0 0 model.board)],
         div [onClick (CellClicked 0 1)] [text (getDisplayCharacter <| getCellValueFromBoard 0 1 model.board)],
         div [onClick (CellClicked 0 2)] [text (getDisplayCharacter <| getCellValueFromBoard 0 2 model.board)],
