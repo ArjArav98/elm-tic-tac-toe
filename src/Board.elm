@@ -74,6 +74,21 @@ fillBoardWith row col characterNum board =
 -- QUERYING
 --
 
+boardIsFull : Int -> Int -> Board -> Bool
+boardIsFull row col board =
+    let
+        cellValue = getCellValueFromBoard row col board
+    in
+    if row < 0 then
+        True
+    else if col < 0 then
+        boardIsFull (row-1) 2 board
+    else if cellValue < 1 then
+        False
+    else
+        boardIsFull row (col-1) board
+
+
 boardCellIsEmpty : Int -> Int -> Board -> Bool
 boardCellIsEmpty row col board =
     (getCellValueFromBoard row col board) <= 0

@@ -29,7 +29,8 @@ main = Browser.sandbox { init = init, update = update, view = view }
 type alias Model = {
         board : Board,
         turn : Player,
-        status: GameStatus
+        status : GameStatus,
+        isDraw : Bool
     }
 
 
@@ -37,7 +38,8 @@ init : Model
 init = {
         board = emptyBoard,
         turn = PlayerOne,
-        status = Not_Started
+        status = Not_Started,
+        isDraw = False
     }
 
 --
@@ -59,9 +61,12 @@ update action model =
                     -- Only if cell is empty can we process the click.
                     if (boardCellIsEmpty row col model.board) then
                         if (gameWinner /= -1) then
-                            Model newBoard (getNextPlayer model.turn) (Finished (getPlayerFromNumber gameWinner))
+                            Model newBoard (getNextPlayer model.turn) (Finished (getPlayerFromNumber gameWinner)) False
                         else
-                            Model newBoard (getNextPlayer model.turn) In_Progress
+                            if (boardIsFull 2 2 newBoard) then
+                                Model newBoard (getNextPlayer model.turn) (Finished (getPlayerFromNumber gameWinner)) True
+                            else
+                                Model newBoard (getNextPlayer model.turn) In_Progress False
                     else
                         model
 
@@ -70,7 +75,7 @@ update action model =
 
         -- Game will start.
         Game_Started ->
-            Model emptyBoard PlayerOne In_Progress
+            Model emptyBoard PlayerOne In_Progress False
 
 
 --
@@ -101,7 +106,10 @@ getGameStatusMessage : Model -> Html Action
 getGameStatusMessage model =
     case model.status of
         Finished winner ->
-            h3 [] [text (("The game has been won by ") ++ (getPlayerTurnMessage winner) ++ ". Congrats!")]
+            if model.isDraw then
+                h3 [] [text "The game is a draw. Well played."]
+            else
+                h3 [] [text (("The game has been won by ") ++ (getPlayerTurnMessage winner) ++ ". Congrats!")]
         In_Progress ->
             h3 [] [text ((getPlayerTurnMessage model.turn) ++ ", your turn.")]
         Not_Started ->
