@@ -70,7 +70,7 @@ update action model =
 
         -- Game will start.
         Game_Started ->
-            Model model.board model.turn In_Progress
+            Model (Array.repeat 3 (Array.repeat 3 0)) PlayerOne In_Progress
 
 
 --
