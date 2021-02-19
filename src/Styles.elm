@@ -26,7 +26,7 @@ settingsStyles = [
         style "margin" "5% 0% 0% 5%",
         style "padding" "1%",
         style "border-radius" "3px",
-        style "box-shadow" "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        style "background-color" "#FFECB3",
         style "vertical-align" "top",
         style "text-align" "center",
         style "font-family" "Verdana"
@@ -40,23 +40,20 @@ settingsStyles = [
 boardStyles : List (Html.Attribute msg)
 boardStyles = [
         style "display" "inline-block",
-        style "width" "40%",
+        style "width" "35%",
         style "margin" "5% 0% 0% 5%",
         style "padding" "0",
-        style "border" "5px solid black",
-        style "border-radius" "4px",
         style "vertical-align" "top"
     ]
 
 boardTileStyles : List (Html.Attribute msg)
 boardTileStyles = [
         style "display" "inline-block",
-        style "width" "32.55%",
+        style "width" "32.50%",
         style "margin" "0",
         style "padding" "0",
         style "font-size" "150%",
         style "text-align" "center",
-        style "border" "3px solid black",
         style "cursor" "pointer"
     ]
 

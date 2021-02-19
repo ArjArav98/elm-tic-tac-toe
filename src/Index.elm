@@ -35,7 +35,7 @@ type alias Model = {
 
 init : Model
 init = {
-        board = Array.repeat 3 (Array.repeat 3 0),
+        board = emptyBoard,
         turn = PlayerOne,
         status = Not_Started
     }
@@ -70,7 +70,7 @@ update action model =
 
         -- Game will start.
         Game_Started ->
-            Model (Array.repeat 3 (Array.repeat 3 0)) PlayerOne In_Progress
+            Model emptyBoard PlayerOne In_Progress
 
 
 --

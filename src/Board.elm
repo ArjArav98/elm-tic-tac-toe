@@ -13,6 +13,9 @@ import Styles exposing (..)
 
 type alias Board = Array (Array Int)
 
+emptyBoard : Board
+emptyBoard = Array.fromList [Array.fromList [-1,0,-1],Array.fromList [0,-1,0], Array.fromList [-1,0,-1]]
+
 --
 -- FUNCTIONS
 --
@@ -73,7 +76,7 @@ fillBoardWith row col characterNum board =
 
 boardCellIsEmpty : Int -> Int -> Board -> Bool
 boardCellIsEmpty row col board =
-    (getCellValueFromBoard row col board) == 0
+    (getCellValueFromBoard row col board) <= 0
 
 getCellValueFromBoard : Int -> Int -> Board -> Int
 getCellValueFromBoard row col board = 
@@ -87,7 +90,7 @@ getDisplayCharacterImgLink charNum =
     else if charNum == 2 then
         "assets/img/o.png"
     else
-        "assets/img/white.png"
+        "assets/img/background.png"
 
 getDisplayCharacterBgColor : Int -> String
 getDisplayCharacterBgColor charNum =
@@ -95,8 +98,10 @@ getDisplayCharacterBgColor charNum =
         "#2196f3"
     else if charNum == 2 then
         "orange"
+    else if charNum == 0 then
+        "#E3F2FD"
     else
-        "white"
+        "#BBDEFB"
 
 
 extractCellValue : Maybe Int -> Int
