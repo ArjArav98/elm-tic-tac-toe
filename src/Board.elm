@@ -83,11 +83,11 @@ getCellValueFromBoard row col board =
 getDisplayCharacterImgLink : Int -> String
 getDisplayCharacterImgLink charNum =
     if charNum == 1 then
-        "../assets/img/x.png"
+        "assets/img/x.png"
     else if charNum == 2 then
-        "../assets/img/o.png"
+        "assets/img/o.png"
     else
-        "../assets/img/white.png"
+        "assets/img/white.png"
 
 getDisplayCharacterBgColor : Int -> String
 getDisplayCharacterBgColor charNum =
