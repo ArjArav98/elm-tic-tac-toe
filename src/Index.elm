@@ -56,11 +56,14 @@ update action model =
                         newBoard = modifyBoard row col model.turn model.board
                         gameWinner = getPlayerWhoHasWon newBoard 2 2 2
                     in
-
-                    if (gameWinner /= -1) then
-                        Model newBoard (getNextPlayer model.turn) (Finished (getPlayerFromNumber gameWinner))
+                    -- Only if cell is empty can we process the click.
+                    if (boardCellIsEmpty row col model.board) then
+                        if (gameWinner /= -1) then
+                            Model newBoard (getNextPlayer model.turn) (Finished (getPlayerFromNumber gameWinner))
+                        else
+                            Model newBoard (getNextPlayer model.turn) In_Progress
                     else
-                        Model newBoard (getNextPlayer model.turn) In_Progress
+                        model
 
                 Finished winner -> model
                 Not_Started -> model

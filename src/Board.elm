@@ -71,6 +71,9 @@ fillBoardWith row col characterNum board =
 -- QUERYING
 --
 
+boardCellIsEmpty : Int -> Int -> Board -> Bool
+boardCellIsEmpty row col board =
+    (getCellValueFromBoard row col board) == 0
 
 getCellValueFromBoard : Int -> Int -> Board -> Int
 getCellValueFromBoard row col board = 
