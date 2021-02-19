@@ -1,5 +1,5 @@
 module GameStatus exposing (..)
-import Player exposing (Player)
+import Player exposing (..)
 import Board exposing (Board, getCellValueFromBoard)
 
 --
@@ -20,55 +20,81 @@ getGameStatus status =
         Not_Started -> "not started"
 
 
-anyPlayerHasWonHorizontally : Board -> Int -> Int -> Int -> Bool
-anyPlayerHasWonHorizontally board rowNumber colNumber currentPlayerNumber =
+getPlayerWhoHasWon : Board -> Int -> Int -> Int -> Int
+getPlayerWhoHasWon board rowNumber colNumber currentPlayerNumber =
+    let
+        horizontalWinner = getPlayerWhoHasWonHorizontally board rowNumber colNumber currentPlayerNumber
+        verticalWinner = getPlayerWhoHasWonVertically board rowNumber colNumber currentPlayerNumber
+        diagonalWinner = getPlayerWhoHasWonDiagonally board currentPlayerNumber
+    in
+    if (horizontalWinner /= -1) then
+        horizontalWinner
+    else if (verticalWinner /= -1) then
+        verticalWinner
+    else if (diagonalWinner /= -1) then
+        diagonalWinner
+    else
+        -1
+
+
+getPlayerWhoHasWonHorizontally : Board -> Int -> Int -> Int -> Int
+getPlayerWhoHasWonHorizontally board rowNumber colNumber currentPlayerNumber =
+    let
+        currentCellValue = getCellValueFromBoard rowNumber colNumber board
+    in
     if (rowNumber < 0) then
         if (currentPlayerNumber == 0) then
-            False
+            -1
         else
-            anyPlayerHasWonHorizontally board 2 2 (currentPlayerNumber-1)
+            getPlayerWhoHasWonHorizontally board 2 2 (currentPlayerNumber-1)
     else if(colNumber < 0) then
-        True
-    else if ((getCellValueFromBoard rowNumber colNumber board) == currentPlayerNumber) then
+        currentPlayerNumber
+    else if (currentCellValue == currentPlayerNumber) then
         if (currentPlayerNumber == 0) then
-            False
+            -1
         else
-            anyPlayerHasWonHorizontally board rowNumber (colNumber-1) currentPlayerNumber
+            getPlayerWhoHasWonHorizontally board rowNumber (colNumber-1) currentPlayerNumber
     else
-        anyPlayerHasWonHorizontally board (rowNumber-1) 2 currentPlayerNumber
+        getPlayerWhoHasWonHorizontally board (rowNumber-1) 2 currentPlayerNumber
 
-anyPlayerHasWonVertically : Board -> Int -> Int -> Int -> Bool
-anyPlayerHasWonVertically board rowNumber colNumber currentPlayerNumber =
+getPlayerWhoHasWonVertically : Board -> Int -> Int -> Int -> Int
+getPlayerWhoHasWonVertically board rowNumber colNumber currentPlayerNumber =
+    let
+        currentCellValue = getCellValueFromBoard rowNumber colNumber board
+    in
     if (colNumber < 0) then
         if (currentPlayerNumber == 0) then
-            False
+            -1
         else
-            anyPlayerHasWonVertically board 2 2 (currentPlayerNumber-1)
+            getPlayerWhoHasWonVertically board 2 2 (currentPlayerNumber-1)
     else if(rowNumber < 0) then
-        True
-    else if ((getCellValueFromBoard rowNumber colNumber board) == currentPlayerNumber) then
+        currentPlayerNumber
+    else if (currentCellValue == currentPlayerNumber) then
         if (currentPlayerNumber == 0) then
-            False
+            -1
         else
-            anyPlayerHasWonVertically board (rowNumber-1) colNumber currentPlayerNumber
+            getPlayerWhoHasWonVertically board (rowNumber-1) colNumber currentPlayerNumber
     else
-        anyPlayerHasWonVertically board 2 (colNumber-1) currentPlayerNumber
+        getPlayerWhoHasWonVertically board 2 (colNumber-1) currentPlayerNumber
 
 
-anyPlayerHasWonDiagonally : Board -> Int -> Bool
-anyPlayerHasWonDiagonally board currentPlayerNumber =
+getPlayerWhoHasWonDiagonally : Board -> Int -> Int
+getPlayerWhoHasWonDiagonally board currentPlayerNumber =
     let
         bottomLeft = ((getCellValueFromBoard 2 0 board) == currentPlayerNumber)
         topLeft = ((getCellValueFromBoard 0 0 board) == currentPlayerNumber)
         center = ((getCellValueFromBoard 1 1 board) == currentPlayerNumber)
         topRight = ((getCellValueFromBoard 0 2 board) == currentPlayerNumber)
         bottomRight = ((getCellValueFromBoard 2 2 board) == currentPlayerNumber)
+        player = getPlayerFromNumber currentPlayerNumber
+
     in
+
     if (currentPlayerNumber == 0) then
-        False
+        -1
     else if ( bottomLeft && center && topRight ) then
-        True
+        currentPlayerNumber
     else if ( bottomRight && center && topLeft ) then
-        True
+        currentPlayerNumber
     else
-        anyPlayerHasWonDiagonally board (currentPlayerNumber-1)
+        getPlayerWhoHasWonDiagonally board (currentPlayerNumber-1)

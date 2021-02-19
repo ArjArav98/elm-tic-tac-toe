@@ -4,6 +4,7 @@ import Browser
 import Array exposing (Array) 
 import Html exposing (Html, div, button, text, p, h1, h3)
 import Html.Attributes exposing (style, attribute)
+import Html.Events exposing (onClick)
 
 import Board exposing (..)
 import Player exposing (..)
@@ -46,8 +47,27 @@ init = {
 update : Action -> Model -> Model
 update action model =
     case action of
+
+        -- Only if game is in progress must CellClicked execute.
         CellClicked row col ->
-            Model (modifyBoard row col model.turn model.board) (getNextPlayer model.turn) In_Progress
+            case model.status of
+                In_Progress ->
+                    let
+                        newBoard = modifyBoard row col model.turn model.board
+                        gameWinner = getPlayerWhoHasWon newBoard 2 2 2
+                    in
+
+                    if (gameWinner /= -1) then
+                        Model newBoard (getNextPlayer model.turn) (Finished (getPlayerFromNumber gameWinner))
+                    else
+                        Model newBoard (getNextPlayer model.turn) In_Progress
+
+                Finished winner -> model
+                Not_Started -> model
+
+        -- Game will start.
+        Game_Started ->
+            Model model.board model.turn In_Progress
 
 
 --
@@ -60,7 +80,26 @@ view model =
     div screenStyles [
         div settingsStyles [
             h1 [] [text "Welcome!"],
-            h3 [] [text ((getPlayerTurnMessage model.turn) ++ ", your turn.")]
+            getGameStatusMessage model,
+            getGameStartButton model
         ],
         div boardStyles (generateBoard 2 2 3 model.board Array.empty)
-    ] 
+    ]
+
+getGameStartButton : Model -> Html Action
+getGameStartButton model =
+    case model.status of
+        Not_Started -> h3 [onClick Game_Started] [text "Start New Game!"]
+        Finished winner -> h3 [onClick Game_Started] [text "Play another game!"]
+        In_Progress -> h3 [] [text "Game is in progress."]
+
+
+getGameStatusMessage : Model -> Html Action
+getGameStatusMessage model =
+    case model.status of
+        Finished winner ->
+            h3 [] [text (("The game has been won by ") ++ (getPlayerTurnMessage winner) ++ ". Congrats!")]
+        In_Progress ->
+            h3 [] [text ((getPlayerTurnMessage model.turn) ++ ", your turn.")]
+        Not_Started ->
+            h3 [] []
